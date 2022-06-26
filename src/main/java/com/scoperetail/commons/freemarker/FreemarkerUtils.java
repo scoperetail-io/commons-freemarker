@@ -5,7 +5,8 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import org.xml.sax.InputSource;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -85,11 +86,9 @@ public class FreemarkerUtils {
       return sourceAsXml(xml, templateFileName);
     } catch (IOException e) {
       throw new RuntimeException(e);
-    } catch (ParserConfigurationException e) {
-      throw new RuntimeException(e);
-    } catch (SAXException e) {
-      throw new RuntimeException(e);
     } catch (TemplateException e) {
+      throw new RuntimeException(e);
+    } catch (DocumentException e) {
       throw new RuntimeException(e);
     }
   }
@@ -107,9 +106,11 @@ public class FreemarkerUtils {
    * @throws TemplateException
    */
   private String sourceAsXml(final String xml, final String templateFileName)
-      throws IOException, ParserConfigurationException, SAXException, TemplateException {
-    final Map<String, Object> root = new HashMap<>(1, 1);
-    root.put("doc", freemarker.ext.dom.NodeModel.parse(new InputSource(new StringReader(xml))));
+      throws DocumentException, TemplateException, IOException {
+    Map<String, Object> root = new HashMap<>(1, 1);
+    final Document document = DomParser.parse(new StringReader(xml));
+    root.put("document", document);
+    // StringReader(xml))));
     return process(templateFileName, root);
   }
 

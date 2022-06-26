@@ -1,6 +1,5 @@
-package com.scoperetail.wakanda.commons;
+package com.scoperetail.commons.freemarker;
 
-import com.scoperetail.commons.freemarker.FreemarkerUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
